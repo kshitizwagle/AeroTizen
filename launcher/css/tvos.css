@@ -1,12 +1,13 @@
 /* tvOS-style Home: a Top Shelf for the focused item, wide rounded icons that lift on
-   focus with their name underneath, and a quiet header with only tabs, settings and time.
-   Loaded last so it overrides the base, card-mode and glass styles. Sized explicitly
-   for Chromium 69 (no aspect-ratio, no backdrop-filter). */
+   focus with their name underneath, and a quiet header with search, settings, tabs and
+   time. Overrides the base, card-mode and glass styles; liquid-glass.css adds the
+   material on top. Sizes are explicit (no aspect-ratio). Fonts swap in, so a cold
+   start never hides text while they load. */
 
-@font-face { font-family: "Inter"; font-weight: 400; src: url("../fonts/inter-400.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 500; src: url("../fonts/inter-500.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 600; src: url("../fonts/inter-600.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-weight: 700; src: url("../fonts/inter-700.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../fonts/inter-400.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../fonts/inter-500.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../fonts/inter-600.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../fonts/inter-700.woff2") format("woff2"); font-display: swap; }
 
 html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; letter-spacing: -.01em; background: #000; }
 
