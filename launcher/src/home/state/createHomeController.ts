@@ -9,9 +9,11 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   const { runtime: A, settings, inventory, nodes } = env;
   const state = createStore<HomeState>({ page: 'home', selected: '', active: true, moving: null, draft: null, menu: null });
   let timer: number | undefined, enterDown = false, scroll = 0, started = false;
+  // OK presses scale the focused control down slightly until release, confirming the press.
+  const release = () => { nodes.forEach(node => node.classList.remove('pressed')); };
   const cancelPress = () => {
     if (timer !== undefined) { window.clearTimeout(timer); }
-    timer = undefined; enterDown = false;
+    timer = undefined; enterDown = false; release();
   };
   const update = (patch: Partial<HomeState>) => transaction(() => {
     const before = state.getSnapshot();
@@ -138,8 +140,9 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
       if (enterDown) {return;}
       enterDown = true;
       const selected = current.selected;
+      nodes.get(selected)?.classList.add('pressed');
       timer = window.setTimeout(() => {
-        timer = undefined;
+        timer = undefined; release();
         if (enterDown && selected.startsWith('app:')) {update({ menu: { id: selected.slice(4), selected: 0 } });}
       }, A.config.LONG_PRESS_MS);
       return;
@@ -173,7 +176,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   });
   const keyup = (code: number) => {
     if (code !== K.ENTER) {return;}
-    enterDown = false;
+    enterDown = false; release();
     if (timer === undefined) {return;}
     window.clearTimeout(timer); timer = undefined;
     if (!state.getSnapshot().menu && !state.getSnapshot().moving) {activate(state.getSnapshot().selected);}

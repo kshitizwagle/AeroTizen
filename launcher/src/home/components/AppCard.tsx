@@ -10,6 +10,7 @@ export const AppCard = ({ env, app, active }: { env: HomeEnvironment; app: Insta
   const state = useStore(env.state), moving = state.moving === app.id;
   return <HomeControl env={env} controlKey={'app:' + app.id} dataId={app.id} registered={active} className={'tile app-tile' + (moving ? ' moving' : '')}
     title={brand.title} style={{ background: brand.background }}>
+    <span class="tile-shadow" aria-hidden="true" />
     <AppArtwork app={app} brand={brand} active={active} />
     {moving ? <MoveArrows env={env} id={app.id} /> : null}
   </HomeControl>;

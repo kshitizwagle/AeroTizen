@@ -19,16 +19,11 @@
   -webkit-mask-size: 100% calc(100% + 112px); mask-size: 100% calc(100% + 112px);
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   -webkit-mask-position: 0 -112px; mask-position: 0 -112px;
-  transition: -webkit-mask-position .32s cubic-bezier(.2,.72,.25,1), mask-position .32s cubic-bezier(.2,.72,.25,1);
+  /* Switched instantly: animating a mask repaints while the rows also scroll. */
 }
 #home-root .is-scrolled > .content-mask { -webkit-mask-position: 0 0; mask-position: 0 0; }
-#home-root #rows { transition: transform .32s cubic-bezier(.2,.72,.25,1); }
-/* One-shot reveals keep cached artwork and remote transactions synchronous.
-   Separate names restart cleanly on rapid Home/All apps changes, without timers. */
-.home-page-surface[data-page="home"] { animation: aero-page-home .24s ease-out both; }
-.home-page-surface[data-page="apps"] { animation: aero-page-apps .24s ease-out both; }
-@keyframes aero-page-home { from { opacity: .70; transform: translate3d(-12px,0,0); } to { opacity: 1; transform: none; } }
-@keyframes aero-page-apps { from { opacity: .70; transform: translate3d(12px,0,0); } to { opacity: 1; transform: none; } }
+#home-root #rows { transition: transform 200ms cubic-bezier(.23,1,.32,1); }
+/* Home and All apps switch instantly: it is a remote action repeated often. */
 /* Shared header geometry and moving plates in both appearances; themes change paint. */
 /* Equal 64px slots keep shortcut/status centres aligned. Explicit margins also
    work on TV engines without flex-gap support. */
@@ -75,9 +70,8 @@ body.glass-ui #home-root #aero-tab-glider { background: rgba(236,242,255,.16); }
 }
 #home-root .continue-card.focused { transform: translate3d(0,-4px,0) scale(1.035); }
 @media (prefers-reduced-motion: reduce) {
-  #home-root .continue-card, #home-root .content-mask, #home-root #rows,
+  #home-root .continue-card, #home-root #rows,
   #home-root #aero-header-focus, #home-root #aero-tab-glider { transition: none; }
-  #home-root .home-page-surface { animation: none; }
 }
 
 /* Reserve the scaled card, upward motion and complete 9px focus ring inside

@@ -177,7 +177,13 @@ body.tv .topbar, body.tv main { visibility: hidden; }
 .fire-volume { position: absolute; top: 60px; right: 80px; padding: 14px 28px; border-radius: 999px; background: rgba(0,0,0,.55); font-size: 26px; opacity: 0; transition: opacity .2s; }
 .fire-volume.show { opacity: 1; }
 
-.toast { position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); padding: 18px 34px; border-radius: 12px; background: #1c1c1e; font-size: 26px; }
+/* Toasts rise in and fade out a little faster than they arrive. */
+.toast {
+  position: fixed; left: 50%; bottom: 60px; transform: translateX(-50%); padding: 18px 34px; border-radius: 12px; background: #1c1c1e; font-size: 26px;
+  opacity: 1; transition: opacity 200ms ease-out, transform 200ms cubic-bezier(.23,1,.32,1), display 200ms allow-discrete;
+}
+.toast[hidden] { display: none; opacity: 0; transform: translate(-50%,12px); transition-duration: 150ms; }
+@starting-style { .toast:not([hidden]) { opacity: 0; transform: translate(-50%,12px); } }
 .weather[hidden] { display: none; }
 .units { display: flex; gap: 18px; margin-bottom: 40px; }
 #date-formats { flex-wrap: wrap; }

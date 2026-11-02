@@ -7,7 +7,10 @@ export const TileMenu = ({ env }: { env: HomeEnvironment }) => {
     const origin = menu && env.nodes.get('app:' + menu.id), element = panel.current;
     if (!origin || !element) {return;}
     const rect = origin.getBoundingClientRect(), width = Math.min(382, window.innerWidth - 48);
-    const left = rect.right + 20 + width > window.innerWidth - 24 ? rect.left - width - 20 : rect.right + 20;
+    const flipped = rect.right + 20 + width > window.innerWidth - 24;
+    const left = flipped ? rect.left - width - 20 : rect.right + 20;
+    // The menu grows from the tile it belongs to.
+    element.dataset.side = flipped ? 'left' : 'right';
     element.style.left = Math.max(24, Math.min(window.innerWidth - width - 24, left)) + 'px';
     element.style.top = Math.max(24, Math.min(window.innerHeight - element.offsetHeight - 24, rect.top + 10)) + 'px';
   }, [env, menu]);

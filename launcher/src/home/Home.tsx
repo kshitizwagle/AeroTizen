@@ -59,6 +59,7 @@ export const Home = ({ env }: { env: HomeEnvironment }) => {
           const background = env.runtime.inputs.colour?.(source) || (source.type === 'TV' ? 'linear-gradient(135deg,#2d4a7a,#101a2e)' : 'linear-gradient(135deg,#3b404c,#16181e)');
           // Same card as an app: a logo fills the card; otherwise a glyph with the name and port.
           return <HomeControl key={port} env={env} controlKey={'input:' + source.type + ':' + source.number} className={'tile input-tile' + (logo ? ' has-logo' : '')} title={label} style={{ background }}>
+            <span class="tile-shadow" aria-hidden="true" />
             {logo ? <img class="input-logo" alt="" src={logo} /> : <div class="app-fallback">
               <span class="input-glyph" dangerouslySetInnerHTML={{ __html: (env.runtime.tiles as unknown as { ICONS: Record<string, string> }).ICONS[kind] }} />
               <div class="name">{label}{label !== port && source.type !== 'TV' ? <div class="sub">{port}</div> : null}</div>

@@ -35,8 +35,10 @@ export const TopShelf = ({ env }: { env: HomeEnvironment }) => {
   if (subject) { last.current = subject; }
   const shown = last.current;
   return <section class="top-shelf" aria-hidden="true">
-    {shown ? <div key={shown.key} class="top-shelf-item">
-      <div class="top-shelf-wash" style={{ background: shown.background }} />
+    {/* The item stays mounted so text swaps instantly on every remote press; only the
+        wash is keyed, so it alone fades in (an interruptible transition, not a keyframe). */}
+    {shown ? <div class="top-shelf-item">
+      <div key={shown.key} class="top-shelf-wash" style={{ background: shown.background }} />
       <div class="top-shelf-copy">
         {shown.image ? <div class="top-shelf-logo"><img class="logo top-shelf-image" alt="" src={shown.image} /></div> :
           shown.logo ? <div class="top-shelf-logo"><AppLogoIcon path={shown.logo} colour="#fff" /></div> : null}
