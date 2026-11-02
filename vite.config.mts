@@ -17,7 +17,7 @@ const settingsHtml = (html: string): string => {
   return html.replace(editor, '<div id="settings-root"></div>\n\n')
     .replace(/ {2}<!-- Layout inspired[\s\S]*?(?= {2}<div id="settings-root")/, '  <div id="home-root"></div>\n\n')
     .replace('  <script src="js/home-screen.js"></script>\n', '')
-    .replace('</head>', '  <link rel="stylesheet" href="css/preact-home.css">\n  <link rel="stylesheet" href="css/tvos.css">\n</head>')
+    .replace('</head>', '  <link rel="stylesheet" href="css/preact-home.css">\n  <link rel="stylesheet" href="css/tvos.css">\n  <link rel="stylesheet" href="css/liquid-glass.css">\n</head>')
     .replace('  <script src="js/continue-row.js"></script>\n', '');
 };
 
