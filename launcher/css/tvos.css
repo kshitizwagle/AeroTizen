@@ -18,7 +18,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 
 /* ---- header ---------------------------------------------------------------------- */
 #home-root > .topbar { height: 112px; padding: 0 100px; }
-#home-root #samsung-home-shortcut, #home-root #network, #home-root .date { display: none !important; }
+#home-root #samsung-home-shortcut, #home-root #network { display: none !important; }
 #home-root .topbar-left > .icon-btn { width: 56px; height: 56px; flex: 0 0 56px; margin-right: 0; color: rgba(255,255,255,.72); }
 #home-root .topbar-left > .icon-btn svg { width: 30px; height: 30px; }
 #home-root .topbar-left > .icon-btn.focused { color: #000; }
@@ -45,6 +45,9 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 
 #home-root .topbar-right { gap: 0; }
 #home-root .topbar-right > * + * { margin-left: 22px; }
+/* The date follows Settings → Date & time; "No date" hides it through [hidden]. */
+#home-root .date { font-size: 28px; font-weight: 500; color: rgba(255,255,255,.62); }
+#home-root .date[hidden] { display: none; }
 #home-root .time { font-size: 34px; font-weight: 600; letter-spacing: -.02em; }
 #home-root .weather { font-size: 28px; margin-right: 0; color: rgba(255,255,255,.8); }
 #home-root .weather svg { width: 36px; height: 36px; }
