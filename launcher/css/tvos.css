@@ -42,7 +42,8 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
   background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45);
 }
 
-#home-root .topbar-right { gap: 22px; }
+#home-root .topbar-right { gap: 0; }
+#home-root .topbar-right > * + * { margin-left: 22px; }
 #home-root .time { font-size: 34px; font-weight: 600; letter-spacing: -.02em; }
 #home-root .weather { font-size: 28px; margin-right: 0; color: rgba(255,255,255,.8); }
 #home-root .weather svg { width: 36px; height: 36px; }
@@ -50,7 +51,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 /* ---- top shelf ------------------------------------------------------------------- */
 #home-root > .content-viewport { position: relative; z-index: 2; }
 #home-root > .topbar { z-index: 5; }
-#home-root .top-shelf-spacer { height: 452px; }
+#home-root .top-shelf-spacer { height: 400px; }
 .top-shelf {
   position: absolute; top: 0; left: 0; width: 1920px; height: 700px; z-index: 1; pointer-events: none; overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
@@ -66,7 +67,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
   background: linear-gradient(to right, rgba(0,0,0,.7) 0%, rgba(0,0,0,.15) 55%, rgba(0,0,0,.45) 100%),
               linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.35) 100%);
 }
-.top-shelf-copy { position: absolute; left: 100px; top: 210px; z-index: 1; max-width: 1100px; }
+.top-shelf-copy { position: absolute; left: 100px; top: 180px; z-index: 1; max-width: 1100px; }
 .top-shelf-logo { width: 84px; height: 84px; margin-bottom: 18px; }
 .top-shelf-logo .logo { width: 84px; height: 84px; display: block; }
 .top-shelf-image { border-radius: 20px; box-shadow: 0 10px 24px rgba(0,0,0,.4); }
@@ -81,8 +82,11 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 /* Five 5:3 icons fill the 1720px content width; room below each row for its caption. */
 #home-root #rows { padding: 0 100px; }
 #home-root .app-grid.tvos-grid {
-  display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 76px 40px; width: 1720px; margin: 18px 0 92px;
+  display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0; width: 1720px; margin: 18px 0 0;
 }
+/* The TV engine has no flex gap, so columns and rows are spaced with margins. */
+#home-root .app-grid.tvos-grid > .tile { margin: 0 40px 76px 0; }
+#home-root .app-grid.tvos-grid > .tile:nth-child(5n) { margin-right: 0; }
 #home-root .app-grid.tvos-grid .tile {
   flex: 0 0 auto; width: 312px; height: 187px; padding: 0; border-radius: 22px; overflow: visible;
   box-shadow: 0 8px 18px rgba(0,0,0,.35);
@@ -92,7 +96,8 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 #home-root .app-grid.tvos-grid .tile > .app-fallback,
 #home-root .app-grid.tvos-grid .tile > .app-artwork { border-radius: inherit; overflow: hidden; }
 #home-root .app-grid.tvos-grid .app-artwork { object-fit: cover; background: transparent; }
-#home-root .app-grid.tvos-grid .app-fallback { flex-direction: row; gap: 16px; padding: 0 24px; }
+#home-root .app-grid.tvos-grid .app-fallback { flex-direction: row; gap: 0; padding: 0 24px; }
+#home-root .app-grid.tvos-grid .app-fallback > * + * { margin-left: 16px; }
 #home-root .app-grid.tvos-grid .app-fallback .logo { width: 80px; height: 80px; }
 #home-root .app-grid.tvos-grid .app-fallback.logo-only .logo { width: 210px; height: 110px; }
 #home-root .app-grid.tvos-grid .app-fallback.logo-big .logo { width: 240px; height: 130px; }
@@ -124,25 +129,15 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 #home-root .home-page-surface[data-page="apps"] { padding-top: 46px; }
 
 /* ---- inputs ---------------------------------------------------------------------- */
-#home-root .inputs-wrap { margin: 0 0 40px; }
-/* Equal-width pills read as one row; the label truncates rather than stretching a pill. */
-#home-root #inputs { display: flex; flex-wrap: nowrap; gap: 24px; }
-#home-root #inputs .tile {
-  flex: 0 0 280px; width: 280px; max-width: 280px; min-width: 0; height: 72px; padding: 0 22px 0 16px; gap: 14px;
-  border-radius: 36px; background: rgba(255,255,255,.1); box-shadow: none;
-  transition: transform .2s cubic-bezier(.2,.72,.25,1), background .2s ease-out;
-}
-#home-root #inputs .tile svg, #home-root #inputs .aero-source-icon svg { width: 40px; height: 40px; border-radius: 10px; }
-#home-root #inputs .aero-source-icon { display: flex; flex: 0 0 40px; }
-#home-root #inputs .input-logo { width: 40px; height: 40px; border-radius: 10px; display: block; }
-#home-root #inputs .aero-source-status { display: none; }
-#home-root #inputs .tile .name { flex: 1 1 auto; min-width: 0; max-width: none; overflow: hidden; white-space: nowrap; font-size: 24px; font-weight: 600; color: #fff; display: flex; align-items: baseline; gap: 10px; }
-#home-root #inputs .tile .name .sub { flex: 0 0 auto; margin: 0; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.5); }
-#home-root #inputs .tile.focused { transform: scale(1.05); background: #fff; box-shadow: 0 16px 30px rgba(0,0,0,.5); }
-#home-root #inputs .tile.focused .name { color: #000; }
-#home-root #inputs .tile.focused .name .sub { color: rgba(0,0,0,.55); }
-#home-root #inputs .tile.off { opacity: .45; }
-#home-root #inputs .tile.off.focused { opacity: 1; }
+/* Connected inputs use the app card; the grid styles above supply size, focus and caption. */
+#home-root .inputs-wrap { margin: 0; }
+#home-root .input-tile { display: flex; align-items: center; justify-content: center; }
+#home-root .input-tile .input-logo { display: block; width: 187px; height: 187px; }
+#home-root .input-tile .input-glyph { display: block; flex: 0 0 64px; width: 64px; height: 64px; }
+#home-root .input-tile .input-glyph svg { display: block; width: 64px; height: 64px; }
+#home-root .input-tile .app-fallback { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+#home-root .input-tile .name { font-size: 28px; font-weight: 600; line-height: 1.15; color: #fff; text-align: left; }
+#home-root .input-tile .name .sub { display: block; margin-top: 4px; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.55); }
 
 /* ---- continue watching ------------------------------------------------------------ */
 #home-root #continue-section h2 { font-size: 26px; font-weight: 600; color: rgba(255,255,255,.7); }

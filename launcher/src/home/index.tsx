@@ -23,8 +23,11 @@ const syncShell = () => document.body.classList.toggle('glass-ui', runtime.setti
 syncShell();
 const refresh = () => flushSync(() => {
   syncShell();
-  const inputs = runtime.inputs.sources.filter(source => runtime.inputs.isVisible ? runtime.inputs.isVisible(source) :
-    source.type === 'TV' ? runtime.settings.showLiveTv !== false : !(runtime.settings.hideDisconnectedHdmi && source.type === 'HDMI' && source.connected === false));
+  // Home shows connected inputs only (plus Live TV); Settings still lists every port.
+  const connected = (source: typeof runtime.inputs.sources[number]) => source.type === 'TV' || source.connected === true || source.active === true ||
+    !!runtime.inputs.hasRecognizedDevice?.(source) || !!runtime.inputs.alwaysVisible?.(source);
+  const inputs = runtime.inputs.sources.filter(source => (runtime.inputs.isVisible ? runtime.inputs.isVisible(source) :
+    source.type === 'TV' ? runtime.settings.showLiveTv !== false : !(runtime.settings.hideDisconnectedHdmi && source.type === 'HDMI' && source.connected === false)) && connected(source));
   inventory.set({ apps: runtime.apps.all, inputs, items: runtime.continueWatching.items, ready: runtime.apps.ready });
 });
 const originalRender = runtime.inputs.render;

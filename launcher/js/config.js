@@ -29,7 +29,7 @@ AeroTizen.config = {
   FIREPLACE_VIDEO: 'WuHSBSLK3_A',
 
   // Built-in names and logos for known ports. A name set in Settings → Input names still wins.
-  INPUT_PRESETS: { 'HDMI 1': { name: 'ViaTV', icon: 'assets/inputs/viatv.png', colour: '#e8262d' } },
+  INPUT_PRESETS: { 'HDMI 1': { name: 'ViaTV', icon: 'assets/inputs/viatv.png', colour: '#ec1c24' } },
 
   CARD_COLUMNS: { big: 3, small: 5 },  // Settings → App cards
   LONG_PRESS_MS: 600,

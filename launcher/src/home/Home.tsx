@@ -43,14 +43,17 @@ export const Home = ({ env }: { env: HomeEnvironment }) => {
       <p id="apps-empty" class="apps-empty" hidden={page === 'home' || apps.length > 0}>{env.translate('No apps found.')}</p>
       <section id="continue-section" class="row-wrap" hidden={page !== 'home' || !settings.continueWatching || !items.length}><h2>{env.translate('Continue Watching')}</h2>
         <div class="continue-viewport"><div id="continue-items" class="row" aria-label="Continue Watching">{items.map(item => <ContinueCard key={item.key} env={env} item={item} />)}</div></div></section>
-      <section id="inputs-section" class="row-wrap inputs-wrap" hidden={page !== 'home' || !inputs.length}><div id="inputs" class={'row small' + (inputs.length < 5 ? ' aero-dock-compact' : '')}>
+      <section id="inputs-section" class="row-wrap inputs-wrap" hidden={page !== 'home' || !inputs.length}><div id="inputs" class="app-grid tvos-grid tvos-inputs" aria-label="Inputs">
         {inputs.map(source => {
-          const label = env.runtime.inputs.label(source), port = env.runtime.inputs.portName(source);
+          const label = env.runtime.inputs.label(source), port = env.runtime.inputs.portName(source), logo = env.runtime.inputs.icon?.(source);
           const kind = source.type === 'TV' ? 'tv' : /xbox|playstation|ps\d|switch|nintendo|game|console/i.test(label) ? 'game' : /pc|computer|mac|laptop/i.test(label) ? 'pc' : /cable|box|roku|fire|apple|shield|chromecast|blu|dvd|satellite/i.test(label) ? 'box' : 'hdmi';
-          return <HomeControl key={port} env={env} controlKey={'input:' + source.type + ':' + source.number} className={'tile' + (settings.glassSettings ? ' aero-source-card aero-source-' + (source.type === 'TV' ? 'live' : source.active ? 'active' : source.connected ? 'connected' : env.runtime.inputs.hasRecognizedDevice?.(source) ? 'recognised' : env.runtime.inputs.alwaysVisible?.(source) ? 'forced' : 'empty') : '') + (source.connected === false && !source.active && !env.runtime.inputs.hasRecognizedDevice?.(source) && !env.runtime.inputs.alwaysVisible?.(source) ? ' off' : '')} title={label}>
-            {env.runtime.inputs.icon?.(source) ? <span class="aero-source-icon"><img class="input-logo" alt="" src={env.runtime.inputs.icon(source)} /></span> :
-              <span class="aero-source-icon" dangerouslySetInnerHTML={{ __html: (env.runtime.tiles as unknown as { ICONS: Record<string, string> }).ICONS[kind] }} />}
-            {settings.glassSettings ? <span class="aero-source-status">{source.type === 'TV' ? 'TV' : source.active ? 'ACTIVE' : source.connected ? 'ON' : env.runtime.inputs.hasRecognizedDevice?.(source) ? 'RECOGNISED' : env.runtime.inputs.alwaysVisible?.(source) ? 'PINNED' : 'OFF'}</span> : null}<div class="name">{label}{label !== port && source.type !== 'TV' ? <div class="sub">{port}</div> : null}</div>
+          const background = env.runtime.inputs.colour?.(source) || (source.type === 'TV' ? 'linear-gradient(135deg,#2d4a7a,#101a2e)' : 'linear-gradient(135deg,#3b404c,#16181e)');
+          // Same card as an app: a logo fills the card; otherwise a glyph with the name and port.
+          return <HomeControl key={port} env={env} controlKey={'input:' + source.type + ':' + source.number} className={'tile input-tile' + (logo ? ' has-logo' : '')} title={label} style={{ background }}>
+            {logo ? <img class="input-logo" alt="" src={logo} /> : <div class="app-fallback">
+              <span class="input-glyph" dangerouslySetInnerHTML={{ __html: (env.runtime.tiles as unknown as { ICONS: Record<string, string> }).ICONS[kind] }} />
+              <div class="name">{label}{label !== port && source.type !== 'TV' ? <div class="sub">{port}</div> : null}</div>
+            </div>}
           </HomeControl>;
         })}
       </div></section>
