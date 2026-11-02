@@ -42,6 +42,10 @@
 }
 
 /* ---- header buttons -------------------------------------------------------------- */
+/* Both buttons are identical circles; ID selectors outweigh the Glass header's #gear sizing. */
+#home-root .topbar-left > #gear, #home-root .topbar-left > #search {
+  flex: 0 0 56px; width: 56px; height: 56px; min-width: 56px; padding: 0; border: 0; border-radius: 50%;
+}
 #home-root .topbar-left > .icon-btn { color: rgba(255,255,255,.85); }
 #home-root .topbar-left > .icon-btn.focused,
 body.glass-ui #home-root .topbar-left > .icon-btn.focused { color: #fff; }
