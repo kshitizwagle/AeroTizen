@@ -22,7 +22,11 @@
 
   inputs.portName = function (s) { return s.type === 'TV' ? 'Live TV' : s.type + ' ' + s.number; };
 
-  inputs.label = function (s) { return A.settings.inputNames[inputs.portName(s)] || s.editName || inputs.portName(s); };
+  function preset(s) { return ((A.config && A.config.INPUT_PRESETS) || {})[inputs.portName(s)] || {}; }
+
+  inputs.label = function (s) { return A.settings.inputNames[inputs.portName(s)] || preset(s).name || s.editName || inputs.portName(s); };
+  inputs.icon = function (s) { return preset(s).icon || ''; };
+  inputs.colour = function (s) { return preset(s).colour || ''; };
 
   function iconFor(s, label) {
     if (s.type === 'TV') { return ICONS.tv; }

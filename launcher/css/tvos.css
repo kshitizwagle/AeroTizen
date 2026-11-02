@@ -69,6 +69,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 .top-shelf-copy { position: absolute; left: 100px; top: 210px; z-index: 1; max-width: 1100px; }
 .top-shelf-logo { width: 84px; height: 84px; margin-bottom: 18px; }
 .top-shelf-logo .logo { width: 84px; height: 84px; display: block; }
+.top-shelf-image { border-radius: 20px; box-shadow: 0 10px 24px rgba(0,0,0,.4); }
 .top-shelf-title {
   font-size: 88px; font-weight: 700; line-height: 1; letter-spacing: -.035em; color: #fff;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 4px 30px rgba(0,0,0,.35);
@@ -132,6 +133,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 }
 #home-root #inputs .tile svg, #home-root #inputs .aero-source-icon svg { width: 40px; height: 40px; border-radius: 10px; }
 #home-root #inputs .aero-source-icon { display: flex; flex: 0 0 40px; }
+#home-root #inputs .input-logo { width: 40px; height: 40px; border-radius: 10px; display: block; }
 #home-root #inputs .aero-source-status { display: none; }
 #home-root #inputs .tile .name { max-width: none; overflow: visible; font-size: 24px; font-weight: 600; color: #fff; display: flex; align-items: baseline; gap: 10px; }
 #home-root #inputs .tile .name .sub { margin: 0; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.5); }

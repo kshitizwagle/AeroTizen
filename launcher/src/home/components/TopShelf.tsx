@@ -14,15 +14,19 @@ export const TopShelf = ({ env }: { env: HomeEnvironment }) => {
       const app = apps.find(item => item.id === selected.slice(4));
       if (app) {
         const brand = env.describe(app);
-        return { key: selected, title: brand.title, background: brand.background, logo: brand.logoPath, hint: env.translate('Press OK to open') };
+        return { key: selected, title: brand.title, background: brand.background, logo: brand.logoPath, image: '', hint: env.translate('Press OK to open') };
       }
     }
     if (selected.startsWith('input:')) {
       const source = inputs.find(item => 'input:' + item.type + ':' + item.number === selected);
       if (source) {
-        const label = env.runtime.inputs.label(source), port = env.runtime.inputs.portName(source);
-        return { key: selected, title: label, background: 'linear-gradient(135deg,#2b3a55,#0d1320)', logo: null,
-          hint: source.type === 'TV' ? 'HDMI 1' : label !== port ? port : env.translate('Input') };
+        // Live TV opens HDMI 1, so it borrows that port's name, logo and colour.
+        const shown = source.type === 'TV' ? inputs.find(item => item.type === 'HDMI' && Number(item.number) === 1) || source : source;
+        const label = env.runtime.inputs.label(source), port = env.runtime.inputs.portName(shown);
+        const colour = env.runtime.inputs.colour?.(shown) || '';
+        return { key: selected, title: label, background: colour || 'linear-gradient(135deg,#2b3a55,#0d1320)', logo: null,
+          image: env.runtime.inputs.icon?.(shown) || '',
+          hint: source.type === 'TV' ? env.runtime.inputs.label(shown) + ' · ' + port : label !== port ? port : env.translate('Input') };
       }
     }
     return null;
@@ -34,7 +38,8 @@ export const TopShelf = ({ env }: { env: HomeEnvironment }) => {
     {shown ? <div key={shown.key} class="top-shelf-item">
       <div class="top-shelf-wash" style={{ background: shown.background }} />
       <div class="top-shelf-copy">
-        {shown.logo ? <div class="top-shelf-logo"><AppLogoIcon path={shown.logo} colour="#fff" /></div> : null}
+        {shown.image ? <div class="top-shelf-logo"><img class="logo top-shelf-image" alt="" src={shown.image} /></div> :
+          shown.logo ? <div class="top-shelf-logo"><AppLogoIcon path={shown.logo} colour="#fff" /></div> : null}
         <h1 class="top-shelf-title">{shown.title}</h1>
         <p class="top-shelf-hint">{shown.hint}</p>
       </div>
