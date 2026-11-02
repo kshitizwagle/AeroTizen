@@ -125,9 +125,10 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 
 /* ---- inputs ---------------------------------------------------------------------- */
 #home-root .inputs-wrap { margin: 0 0 40px; }
-#home-root #inputs { display: flex; flex-wrap: nowrap; gap: 20px; }
+/* Equal-width pills read as one row; the label truncates rather than stretching a pill. */
+#home-root #inputs { display: flex; flex-wrap: nowrap; gap: 24px; }
 #home-root #inputs .tile {
-  flex: 0 0 auto; width: auto; max-width: 420px; min-width: 0; height: 72px; padding: 0 30px 0 18px; gap: 14px;
+  flex: 0 0 280px; width: 280px; max-width: 280px; min-width: 0; height: 72px; padding: 0 22px 0 16px; gap: 14px;
   border-radius: 36px; background: rgba(255,255,255,.1); box-shadow: none;
   transition: transform .2s cubic-bezier(.2,.72,.25,1), background .2s ease-out;
 }
@@ -135,9 +136,9 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 #home-root #inputs .aero-source-icon { display: flex; flex: 0 0 40px; }
 #home-root #inputs .input-logo { width: 40px; height: 40px; border-radius: 10px; display: block; }
 #home-root #inputs .aero-source-status { display: none; }
-#home-root #inputs .tile .name { max-width: none; overflow: visible; font-size: 24px; font-weight: 600; color: #fff; display: flex; align-items: baseline; gap: 10px; }
-#home-root #inputs .tile .name .sub { margin: 0; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.5); }
-#home-root #inputs .tile.focused { transform: scale(1.08); background: #fff; box-shadow: 0 16px 30px rgba(0,0,0,.5); }
+#home-root #inputs .tile .name { flex: 1 1 auto; min-width: 0; max-width: none; overflow: hidden; white-space: nowrap; font-size: 24px; font-weight: 600; color: #fff; display: flex; align-items: baseline; gap: 10px; }
+#home-root #inputs .tile .name .sub { flex: 0 0 auto; margin: 0; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.5); }
+#home-root #inputs .tile.focused { transform: scale(1.05); background: #fff; box-shadow: 0 16px 30px rgba(0,0,0,.5); }
 #home-root #inputs .tile.focused .name { color: #000; }
 #home-root #inputs .tile.focused .name .sub { color: rgba(0,0,0,.55); }
 #home-root #inputs .tile.off { opacity: .45; }
