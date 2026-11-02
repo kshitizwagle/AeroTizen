@@ -121,9 +121,16 @@
   };
 
   inputs.show = function (s) {
-    // Native Live TV owns channel selection and remote control, unlike the
+    // The Live TV tile opens the set-top box on HDMI 1 in the native viewer,
+    // which owns the picture and passes the remote through to the box.
+    var live = !!(s && s.type === 'TV');
+    if (live) {
+      var box = inputs.sources.filter(function (source) { return source.type === 'HDMI' && Number(source.number) === 1; })[0];
+      if (box) { s = box; }
+    }
+    // Native viewing owns source selection and remote control, unlike the
     // upstream embedded TVWindow. If unsupported, preserve TVWindow fallback.
-    if (s && s.type === 'TV' && A.homewatch &&
+    if (live && A.homewatch &&
         typeof A.homewatch.openNativeLiveTV === 'function' &&
         A.homewatch.openNativeLiveTV(s.raw || s) !== false) { return; }
     if (!tz || !tz.tvwindow) { return A.toast('Would switch to ' + inputs.label(s)); }

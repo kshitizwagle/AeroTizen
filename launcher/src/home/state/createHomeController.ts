@@ -18,14 +18,14 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
     if (Object.keys(patch).some(key => before[key as keyof HomeState] !== patch[key as keyof HomeState])) { state.set({ ...before, ...patch }); }
   });
   const homeIds = () => {
-    const saved = state.getSnapshot().draft || (settings.getSnapshot().home.length || A.settings.home !== null ? settings.getSnapshot().home : [A.config.FIREPLACE_ID]);
-    // Movement must address the same visible IDs as the grid, not stale saved apps.
-    return saved.filter(id => id === A.config.FIREPLACE_ID || !inventory.getSnapshot().ready || A.apps.byId(id));
+    const saved = state.getSnapshot().draft || settings.getSnapshot().home;
+    // Movement must address the same visible IDs as the grid, not stale saved apps or the Fireplace.
+    return saved.filter(id => id !== A.config.FIREPLACE_ID && (!inventory.getSnapshot().ready || A.apps.byId(id)));
   };
-  const ids = () => state.getSnapshot().page === 'home' ? homeIds().filter(id => id === A.config.FIREPLACE_ID || !inventory.getSnapshot().ready || A.apps.byId(id)) : inventory.getSnapshot().apps.map(app => app.id);
+  const ids = () => state.getSnapshot().page === 'home' ? homeIds() : inventory.getSnapshot().apps.map(app => app.id);
   const sourceKey = (source: { type: string; number?: number }) => 'input:' + source.type + ':' + source.number;
   const rows = (): string[][] => {
-    const columns = env.columns(settings.getSnapshot()), all = ids(), result = [['gear', 'samsung-home-shortcut', 'home-tab', 'apps-tab']];
+    const columns = env.columns(settings.getSnapshot()), all = ids(), result = [['gear', 'home-tab', 'apps-tab']];
     for (let i = 0; i < all.length; i += columns) {result.push(all.slice(i, i + columns).map(id => 'app:' + id));}
     if (state.getSnapshot().page === 'home') {
       if (settings.getSnapshot().continueWatching && inventory.getSnapshot().items.length) {result.push(inventory.getSnapshot().items.map(item => 'continue:' + item.key));}
@@ -42,8 +42,10 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
     }
     if (pending.menu && !ids().includes(pending.menu.id)) { update({ menu: null }); cancelPress(); }
     const list = rows(), old = state.getSnapshot().selected;
-    const selected = !started && list[1]?.[0] ? list[1][0] : list.some(row => row.includes(old)) ? old : list[1]?.[0] || 'home-tab';
-    if (list[1]?.length) { started = true; }
+    // Start on the first app once apps arrive, even if inputs were listed first.
+    const firstApp = list[1]?.[0]?.startsWith('app:') ? list[1][0] : '';
+    const selected = !started && firstApp ? firstApp : list.some(row => row.includes(old)) ? old : list[1]?.[0] || 'home-tab';
+    if (firstApp) { started = true; }
     if (old !== selected) { cancelPress(); }
     update({ selected, active: true });
     const node = nodes.get(selected), main = env.rows.current;
@@ -85,12 +87,10 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   };
   const activate = (key: string) => {
     if (key === 'gear') { endMove(); A.settingsUi.open(); }
-    else if (key === 'samsung-home-shortcut') { if (A.homewatch.openSamsungHome) { A.homewatch.openSamsungHome(); } else { A.homewatch.useSamsungHome(); } }
     else if (key === 'home-tab' || key === 'apps-tab') {showPage(key === 'home-tab' ? 'home' : 'apps');}
     else if (key.startsWith('app:')) {
       const id = key.slice(4), app = A.apps.byId(id);
-      if (id === A.config.FIREPLACE_ID) {A.apps.playFireplace();}
-      else if (app) {A.apps.launch(app);}
+      if (app) {A.apps.launch(app);}
     } else if (key.startsWith('continue:')) {
       const item = inventory.getSnapshot().items.find(item => item.key === key.slice(9));
       if (item) {A.continueWatching.open(item);}

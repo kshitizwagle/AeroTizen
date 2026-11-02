@@ -3,7 +3,8 @@ import { AppLogoIcon } from '../../shared/icons/AppLogoIcon';
 import type { InstalledApp, AppPresentation } from '../../settings/types';
 
 export const AppArtwork = ({ app, brand, active }: { app: InstalledApp; brand: AppPresentation; active: boolean }) => {
-  const artwork = useImageSequence(brand.artwork, active);
+  // Wide tvOS tiles would crop Samsung's square artwork, so known brands use their vector logo.
+  const artwork = useImageSequence(brand.logoPath ? [] : brand.artwork, active);
   const icon = useImageSequence(brand.useAppIcon && app.icon ? [app.icon] : [], active);
   return <>
     <div class={'app-fallback' + (!brand.label ? ' logo-only' : '') + (brand.largeLogo ? ' logo-big' : '')} hidden={artwork.loaded}>

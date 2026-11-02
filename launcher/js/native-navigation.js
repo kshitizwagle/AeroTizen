@@ -156,17 +156,17 @@
       } catch (error) { appControlFallback(); }
     }
     function selectTuner() {
-      // A previous HDMI selection must not carry over into native Live TV.
+      // Select the requested source (HDMI 1 for the Live TV tile) before the viewer opens.
       if (!videoSource || !tz.tvwindow || !tz.tvwindow.setSource) {
         launchViewer();
         return;
       }
       try {
         tz.tvwindow.setSource(videoSource, launchViewer, function (error) {
-          failed('TV tuner selection failed: ' +
+          failed('Source selection failed: ' +
             ((error && (error.name || error.message)) || 'source error'));
         }, 'MAIN');
-      } catch (error) { failed('TV tuner selection is unavailable'); }
+      } catch (error) { failed('Source selection is unavailable'); }
     }
     leaveBeforeLaunch(selectTuner, failed);
     return true;

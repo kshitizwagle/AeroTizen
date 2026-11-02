@@ -4,7 +4,7 @@ import type { HomeEnvironment } from '../types';
 
 export const HeaderPlate = ({ env, tabs = false }: { env: HomeEnvironment; tabs?: boolean }) => {
   const state = useStore(env.state);
-  const keys = tabs ? ['home-tab', 'apps-tab'] : ['gear', 'samsung-home-shortcut'];
+  const keys = tabs ? ['home-tab', 'apps-tab'] : ['gear'];
   const focused = state.active && keys.includes(state.selected);
   const key = focused ? state.selected : tabs ? state.page + '-tab' : '';
   const positioned = useRef(false);

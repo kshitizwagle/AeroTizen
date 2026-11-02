@@ -1,0 +1,152 @@
+/* tvOS-style Home: a Top Shelf for the focused item, wide rounded icons that lift on
+   focus with their name underneath, and a quiet header with only tabs, settings and time.
+   Loaded last so it overrides the base, card-mode and glass styles. Sized explicitly
+   for Chromium 69 (no aspect-ratio, no backdrop-filter). */
+
+@font-face { font-family: "Inter"; font-weight: 400; src: url("../fonts/inter-400.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("../fonts/inter-500.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../fonts/inter-600.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../fonts/inter-700.woff2") format("woff2"); }
+
+html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; letter-spacing: -.01em; background: #000; }
+
+/* Darken any chosen background so icons, not wallpaper, carry the colour. */
+#home-root::before {
+  content: ""; position: fixed; top: 0; left: 0; width: 1920px; height: 1080px; z-index: 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,.55) 50%, rgba(0,0,0,.82) 100%);
+}
+
+/* ---- header ---------------------------------------------------------------------- */
+#home-root > .topbar { height: 112px; padding: 0 100px; }
+#home-root #samsung-home-shortcut, #home-root #network, #home-root .date { display: none !important; }
+#home-root .topbar-left > .icon-btn { width: 56px; height: 56px; flex: 0 0 56px; margin-right: 0; color: rgba(255,255,255,.72); }
+#home-root .topbar-left > .icon-btn svg { width: 30px; height: 30px; }
+#home-root .topbar-left > .icon-btn.focused { color: #000; }
+#home-root #aero-header-focus { border: 0; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45); }
+
+#home-root .topbar > .view-tabs, body.glass-ui #home-root .topbar > .view-tabs {
+  top: 26px; height: 64px; min-height: 64px; padding: 4px; border: 0; border-radius: 32px;
+  background: rgba(255,255,255,.08); box-shadow: none;
+}
+#home-root .topbar > .view-tabs .view-tab, body.glass-ui #home-root .topbar > .view-tabs .view-tab {
+  height: 56px; min-width: 150px; padding: 0 30px; border: 0; border-radius: 28px;
+  font-family: inherit; font-size: 26px; font-weight: 600; color: rgba(255,255,255,.55);
+}
+#home-root .topbar > .view-tabs .view-tab:last-child { min-width: 170px; }
+#home-root .topbar > .view-tabs .view-tab.active { color: #fff; }
+#home-root .topbar > .view-tabs .view-tab.focused { color: #000; }
+#home-root #aero-tab-glider, body.glass-ui #home-root #aero-tab-glider {
+  top: 4px; left: 4px; border: 0; border-radius: 28px; background: rgba(255,255,255,.16);
+}
+#home-root #aero-tab-glider.is-focused, body.glass-ui #home-root #aero-tab-glider.is-focused {
+  background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+
+#home-root .topbar-right { gap: 22px; }
+#home-root .time { font-size: 34px; font-weight: 600; letter-spacing: -.02em; }
+#home-root .weather { font-size: 28px; margin-right: 0; color: rgba(255,255,255,.8); }
+#home-root .weather svg { width: 36px; height: 36px; }
+
+/* ---- top shelf ------------------------------------------------------------------- */
+#home-root > .content-viewport { position: relative; z-index: 2; }
+#home-root > .topbar { z-index: 5; }
+#home-root .top-shelf-spacer { height: 452px; }
+.top-shelf {
+  position: absolute; top: 0; left: 0; width: 1920px; height: 700px; z-index: 1; pointer-events: none; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  transition: transform .32s cubic-bezier(.2,.72,.25,1), opacity .32s ease-out;
+}
+#home-root > .content-viewport.is-scrolled ~ .top-shelf { transform: translate3d(0,-160px,0); opacity: 0; }
+.top-shelf-item { position: absolute; top: 0; left: 0; width: 100%; height: 100%; animation: shelf-in .35s ease-out both; }
+.top-shelf-wash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: .42; }
+/* Fade the brand colour into the page: dark at the edges, strongest behind the title. */
+.top-shelf-item::after {
+  content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,.7) 0%, rgba(0,0,0,.15) 55%, rgba(0,0,0,.45) 100%),
+              linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.35) 100%);
+}
+.top-shelf-copy { position: absolute; left: 100px; top: 210px; z-index: 1; max-width: 1100px; }
+.top-shelf-logo { width: 84px; height: 84px; margin-bottom: 18px; }
+.top-shelf-logo .logo { width: 84px; height: 84px; display: block; }
+.top-shelf-title {
+  font-size: 88px; font-weight: 700; line-height: 1; letter-spacing: -.035em; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 4px 30px rgba(0,0,0,.35);
+}
+.top-shelf-hint { margin-top: 16px; font-size: 26px; font-weight: 500; color: rgba(255,255,255,.62); }
+@keyframes shelf-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- app icons ------------------------------------------------------------------- */
+/* Five 5:3 icons fill the 1720px content width; room below each row for its caption. */
+#home-root #rows { padding: 0 100px; }
+#home-root .app-grid.tvos-grid {
+  display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 76px 40px; width: 1720px; margin: 18px 0 92px;
+}
+#home-root .app-grid.tvos-grid .tile {
+  flex: 0 0 auto; width: 312px; height: 187px; padding: 0; border-radius: 22px; overflow: visible;
+  box-shadow: 0 8px 18px rgba(0,0,0,.35);
+  transform: translateZ(0); transform-origin: center center;
+  transition: transform .2s cubic-bezier(.2,.72,.25,1), box-shadow .2s ease-out;
+}
+#home-root .app-grid.tvos-grid .tile > .app-fallback,
+#home-root .app-grid.tvos-grid .tile > .app-artwork { border-radius: inherit; overflow: hidden; }
+#home-root .app-grid.tvos-grid .app-artwork { object-fit: cover; background: transparent; }
+#home-root .app-grid.tvos-grid .app-fallback { flex-direction: row; gap: 16px; padding: 0 24px; }
+#home-root .app-grid.tvos-grid .app-fallback .logo { width: 80px; height: 80px; }
+#home-root .app-grid.tvos-grid .app-fallback.logo-only .logo { width: 210px; height: 110px; }
+#home-root .app-grid.tvos-grid .app-fallback.logo-big .logo { width: 240px; height: 130px; }
+#home-root .app-grid.tvos-grid .app-fallback .name { font-size: 28px; font-weight: 600; text-shadow: none; max-width: 100%; }
+
+/* Static sheen; only its opacity changes on focus. */
+#home-root .app-grid.tvos-grid .tile::before {
+  content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(160deg, rgba(255,255,255,.32) 0%, rgba(255,255,255,.06) 38%, rgba(255,255,255,0) 60%);
+  opacity: 0; transition: opacity .2s ease-out;
+}
+/* The app name sits under the icon and only appears for the focused one. */
+#home-root .app-grid.tvos-grid .tile::after {
+  content: attr(title); position: absolute; left: -20px; right: -20px; top: 100%; margin-top: 16px;
+  font-size: 22px; font-weight: 500; text-align: center; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transition: opacity .2s ease-out;
+}
+#home-root .app-grid.tvos-grid .tile.focused {
+  transform: translate3d(0,-6px,0) scale(1.14); z-index: 8;
+  box-shadow: 0 26px 44px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.12);
+}
+#home-root .app-grid.tvos-grid .tile.focused::before,
+#home-root .app-grid.tvos-grid .tile.focused::after { opacity: 1; }
+#home-root .app-grid.tvos-grid .tile.moving { transform: translate3d(0,-6px,0) scale(1.14); z-index: 30; }
+#home-root .app-grid.tvos-grid .tile.moving::after { opacity: 0; }
+
+/* All apps has no shelf; leave room under the header instead. Padding, not margin:
+   a collapsed margin would move the masked layer and hide the lifted first row. */
+#home-root .home-page-surface[data-page="apps"] { padding-top: 46px; }
+
+/* ---- inputs ---------------------------------------------------------------------- */
+#home-root .inputs-wrap { margin: 0 0 40px; }
+#home-root #inputs { display: flex; flex-wrap: nowrap; gap: 20px; }
+#home-root #inputs .tile {
+  flex: 0 0 auto; width: auto; max-width: 420px; min-width: 0; height: 72px; padding: 0 30px 0 18px; gap: 14px;
+  border-radius: 36px; background: rgba(255,255,255,.1); box-shadow: none;
+  transition: transform .2s cubic-bezier(.2,.72,.25,1), background .2s ease-out;
+}
+#home-root #inputs .tile svg, #home-root #inputs .aero-source-icon svg { width: 40px; height: 40px; border-radius: 10px; }
+#home-root #inputs .aero-source-icon { display: flex; flex: 0 0 40px; }
+#home-root #inputs .aero-source-status { display: none; }
+#home-root #inputs .tile .name { max-width: none; overflow: visible; font-size: 24px; font-weight: 600; color: #fff; display: flex; align-items: baseline; gap: 10px; }
+#home-root #inputs .tile .name .sub { margin: 0; font-size: 20px; font-weight: 500; color: rgba(255,255,255,.5); }
+#home-root #inputs .tile.focused { transform: scale(1.08); background: #fff; box-shadow: 0 16px 30px rgba(0,0,0,.5); }
+#home-root #inputs .tile.focused .name { color: #000; }
+#home-root #inputs .tile.focused .name .sub { color: rgba(0,0,0,.55); }
+#home-root #inputs .tile.off { opacity: .45; }
+#home-root #inputs .tile.off.focused { opacity: 1; }
+
+/* ---- continue watching ------------------------------------------------------------ */
+#home-root #continue-section h2 { font-size: 26px; font-weight: 600; color: rgba(255,255,255,.7); }
+#home-root .continue-card { border-radius: 18px; }
+#home-root .continue-card.focused { box-shadow: 0 26px 44px rgba(0,0,0,.6); }
+#home-root .continue-progress-fill { background: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .top-shelf, .top-shelf-item, #home-root .app-grid.tvos-grid .tile, #home-root #inputs .tile { transition: none; animation: none; }
+}

@@ -15,7 +15,8 @@ const rows = createRef<HTMLElement>();
 const environment = createHomeController({ runtime, settings, inventory, rows, nodes: new Map(),
   translate: value => runtime.i18n?.t(value) || value,
   describe: app => runtime.tiles.describe(app),
-  columns: values => [3,4,5].includes(Number(values.homeCardColumns)) ? Number(values.homeCardColumns) : runtime.config.CARD_COLUMNS[values.cardSize === 'small' ? 'small' : 'big']
+  // The tvOS grid is always five icons wide.
+  columns: () => 5
 }, flushSync);
 // Apply the shared shell mode before any Home focus geometry is measured.
 const syncShell = () => document.body.classList.toggle('glass-ui', runtime.settings.glassSettings === true);
