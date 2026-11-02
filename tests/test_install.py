@@ -100,10 +100,20 @@ def installation(tmp_path, monkeypatch):
         Path(destination).write_bytes(b"signed-widget")
         signed_paths.append(Path(destination))
 
+    launches = []
+    status = {"visible": False}
+    monkeypatch.setattr(cli.remote, "app_status", lambda host, app_id: dict(status))
+    def launch(host, app_id):
+        launches.append(app_id)
+        return True, "HTTP 200 true"
+
+    monkeypatch.setattr(cli.remote, "rest_launch", launch)
+    monkeypatch.setattr(cli, "wait_on_screen", lambda host, app_id: {"visible": True})
     monkeypatch.setattr(cli, "require_sdb", connect)
     monkeypatch.setattr(releases, "download_launcher", download)
     monkeypatch.setattr(signer, "sign_wgt", sign)
     return SimpleNamespace(
+        launches=launches, status=status,
         tv=tv, events=events, downloads=downloads, signed_paths=signed_paths, cdir=cdir, tmp_path=tmp_path
     )
 
@@ -443,3 +453,15 @@ def test_update_rejects_force_before_any_device_or_release_access(updating, monk
         cli.main()
     assert exc.value.code == 2
     assert not updating.events
+
+
+def test_install_reopens_an_app_that_was_on_screen(installation, capsys):
+    installation.status["visible"] = True
+    cli.cmd_install(install_args())
+    assert installation.launches == [APP]
+    assert f"Reopened {APP}: on screen." in capsys.readouterr().out
+
+
+def test_install_leaves_a_background_app_closed(installation):
+    cli.cmd_install(install_args())
+    assert installation.launches == []

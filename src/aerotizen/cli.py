@@ -267,11 +267,26 @@ def _install_signed(session, src, temporary, host):
         sys.exit(f"No certificates for this TV yet. Run: aerotizen --tv {host} certs")
     signed = Path(temporary) / f"{app_id.split('.')[0]}-signed.wgt"
     signer.sign_wgt(src, signed, cdir)
+    # Installing closes a running copy. If it was on screen, nothing else takes the
+    # screen afterwards, so the TV stays black until Home; reopen it once verified.
+    was_visible = (remote.app_status(host, app_id) or {}).get("visible") is True
     with open(os.path.join(cdir, "device-profile.xml"), "rb") as f:
         session.push(f.read(), f"{tool_path}/device-profile.xml")
     output = session.install(app_id, signed.read_bytes(), tool_path)
     print(output.strip())
     verify_install(app_id, version, output, session.applist())
+    if was_visible:
+        _reopen(host, app_id)
+
+
+def _reopen(host, app_id):
+    accepted, reply = remote.rest_launch(host, app_id)
+    status = wait_on_screen(host, app_id) if accepted else None
+    shown = "on screen" if status and status.get("visible") else "not confirmed on screen"
+    if accepted:
+        print(f"Reopened {app_id}: {shown}.")
+    else:
+        print(f"Could not reopen {app_id} ({reply}). Press Home on the TV.")
 
 
 def cmd_install(args):
