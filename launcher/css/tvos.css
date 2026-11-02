@@ -21,7 +21,8 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 #home-root #samsung-home-shortcut, #home-root #network { display: none !important; }
 #home-root .topbar-left > .icon-btn { width: 56px; height: 56px; flex: 0 0 56px; margin-right: 0; color: rgba(255,255,255,.72); }
 #home-root .topbar-left > .icon-btn svg { width: 30px; height: 30px; }
-#home-root .topbar-left > .icon-btn.focused { color: #000; }
+#home-root .topbar-left > .icon-btn.focused,
+body.glass-ui #home-root .topbar-left > .icon-btn.focused { color: #000; }
 #home-root .topbar-left > .icon-btn + .icon-btn { margin-left: 12px; }
 #home-root #aero-header-focus { border: 0; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45); }
 
@@ -34,8 +35,9 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
   font-family: inherit; font-size: 26px; font-weight: 600; color: rgba(255,255,255,.55);
 }
 #home-root .topbar > .view-tabs .view-tab:last-child { min-width: 170px; }
-#home-root .topbar > .view-tabs .view-tab.active { color: #fff; }
-#home-root .topbar > .view-tabs .view-tab.focused { color: #000; }
+/* Glass mode prefixes the base tab rule with body.glass-ui, so these match that weight. */
+#home-root .topbar > .view-tabs .view-tab.active, body.glass-ui #home-root .topbar > .view-tabs .view-tab.active { color: #fff; }
+#home-root .topbar > .view-tabs .view-tab.focused, body.glass-ui #home-root .topbar > .view-tabs .view-tab.focused { color: #000; }
 #home-root #aero-tab-glider, body.glass-ui #home-root #aero-tab-glider {
   top: 4px; left: 4px; border: 0; border-radius: 28px; background: rgba(255,255,255,.16);
 }
