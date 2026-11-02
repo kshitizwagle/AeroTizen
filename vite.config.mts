@@ -52,7 +52,8 @@ export default defineConfig({
   base: './',
   publicDir: false,
   plugins: [preact({ devToolsEnabled: false }), widgetAssets, developmentEntry],
-  server: { host: '0.0.0.0', port: 8019, strictPort: true },
+  // Opens the 1920x1080 launcher preview in the default browser when the dev server starts.
+  server: { host: '0.0.0.0', port: 8019, strictPort: true, open: true },
   build: {
     target: ['chrome69', 'es2018'],
     outDir: path.join(output, 'js'),
