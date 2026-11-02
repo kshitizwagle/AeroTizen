@@ -25,7 +25,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   const ids = () => state.getSnapshot().page === 'home' ? homeIds() : inventory.getSnapshot().apps.map(app => app.id);
   const sourceKey = (source: { type: string; number?: number }) => 'input:' + source.type + ':' + source.number;
   const rows = (): string[][] => {
-    const columns = env.columns(settings.getSnapshot()), all = ids(), result = [['gear', 'home-tab', 'apps-tab']];
+    const columns = env.columns(settings.getSnapshot()), all = ids(), result = [['gear', 'search', 'home-tab', 'apps-tab']];
     for (let i = 0; i < all.length; i += columns) {result.push(all.slice(i, i + columns).map(id => 'app:' + id));}
     if (state.getSnapshot().page === 'home') {
       if (settings.getSnapshot().continueWatching && inventory.getSnapshot().items.length) {result.push(inventory.getSnapshot().items.map(item => 'continue:' + item.key));}
@@ -87,6 +87,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   };
   const activate = (key: string) => {
     if (key === 'gear') { endMove(); A.settingsUi.open(); }
+    else if (key === 'search') { A.apps.launch({ id: A.config.SEARCH_APP_ID, name: env.translate('Search'), icon: '' }); }
     else if (key === 'home-tab' || key === 'apps-tab') {showPage(key === 'home-tab' ? 'home' : 'apps');}
     else if (key.startsWith('app:')) {
       const id = key.slice(4), app = A.apps.byId(id);

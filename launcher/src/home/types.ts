@@ -9,7 +9,7 @@ export interface ContinueItem {
   season: number; episode: number; image?: string; duration: number; playback: number;
 }
 export interface HomeRuntime extends Omit<LauncherRuntime, 'apps' | 'inputs' | 'continueWatching' | 'homeScreen' | 'config'> {
-  config: LauncherRuntime['config'] & { CARD_COLUMNS: Record<string, number>; LONG_PRESS_MS: number };
+  config: LauncherRuntime['config'] & { CARD_COLUMNS: Record<string, number>; LONG_PRESS_MS: number; SEARCH_APP_ID: string };
   apps: LauncherRuntime['apps'] & { ready: boolean; byId(id: string): InstalledApp | null; launch(app: InstalledApp): void; playFireplace(): void };
   inputs: Omit<LauncherRuntime['inputs'], 'sources'> & { sources: Source[]; label(source: Source): string; show(source: Source): void; icon?(source: Source): string; colour?(source: Source): string; isVisible?(source: Source): boolean; hasRecognizedDevice?(source: Source): boolean; alwaysVisible?(source: Source): boolean };
   continueWatching: NonNullable<LauncherRuntime['continueWatching']> & { items: ContinueItem[]; open(item: ContinueItem): void };

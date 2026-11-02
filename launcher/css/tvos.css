@@ -22,6 +22,7 @@ html, body { font-family: "Inter", "SamsungOne", "Roboto", Arial, sans-serif; le
 #home-root .topbar-left > .icon-btn { width: 56px; height: 56px; flex: 0 0 56px; margin-right: 0; color: rgba(255,255,255,.72); }
 #home-root .topbar-left > .icon-btn svg { width: 30px; height: 30px; }
 #home-root .topbar-left > .icon-btn.focused { color: #000; }
+#home-root .topbar-left > .icon-btn + .icon-btn { margin-left: 12px; }
 #home-root #aero-header-focus { border: 0; background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.45); }
 
 #home-root .topbar > .view-tabs, body.glass-ui #home-root .topbar > .view-tabs {
